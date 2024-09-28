@@ -21,7 +21,7 @@ namespace API.Controllers
             var user = new AppUser
             {
                 UserName = registerDto.Username.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.password)),
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
                 PasswordSalt = hmac.Key
             };
             context.Users.Add(user);
@@ -29,7 +29,7 @@ namespace API.Controllers
             return new UserDto
             {
                 UserName = user.UserName,
-                Toeken = tokenService.CreateToken(user)
+                Token = tokenService.CreateToken(user)
             };
         }
 
@@ -42,7 +42,7 @@ namespace API.Controllers
             if (user == null) return Unauthorized("Invalid username");
 
             using var hmac = new HMACSHA512(user.PasswordSalt);
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.password));
+            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
 
             for (int i = 0; i < computedHash.Length; i++)
             {
@@ -52,7 +52,7 @@ namespace API.Controllers
             return new UserDto
             {
                 UserName = user.UserName,
-                Toeken = tokenService.CreateToken(user)
+                Token = tokenService.CreateToken(user)
             };
         }
 
