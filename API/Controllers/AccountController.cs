@@ -4,7 +4,6 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +27,7 @@ namespace API.Controllers
             await context.SaveChangesAsync();
             return new UserDto
             {
-                UserName = user.UserName,
+                Username = user.UserName,
                 Token = tokenService.CreateToken(user)
             };
         }
@@ -51,7 +50,7 @@ namespace API.Controllers
 
             return new UserDto
             {
-                UserName = user.UserName,
+                Username = user.UserName,
                 Token = tokenService.CreateToken(user)
             };
         }
