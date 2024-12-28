@@ -24,7 +24,7 @@ export class MembersService {
     this.userParams.set(new UserParams(this.user));
   }
 
-  getmembers() {
+  getMembers() {
     const response = this.memberCache.get(Object.values(this.userParams).join('-'));
     if (response) return setPaginatedResponse(response, this.paginatedResult);;
 
@@ -43,7 +43,7 @@ export class MembersService {
     })
   } 
 
-  getmember(username: string) {
+  getMember(username: string) {
     const member: Member = [...this.memberCache.values()]
       .reduce((arr, elm) => arr.concat(elm.body), [])
       .find((m: Member) => m.username === username);

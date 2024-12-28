@@ -21,7 +21,7 @@ export class MemberListComponent implements OnInit {
   }
 
   loadMembers() {
-    this.memberService.getmembers();
+    this.memberService.getMembers();
   }
 
   resetFilters() {
