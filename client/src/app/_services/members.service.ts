@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { inject, Injectable, model, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Member } from '../_models/member';
-import { Photo } from '../_models/Photo';
+import { Photo } from '../_models/photo';
 import { PaginatedResult } from '../_models/pagination';
 import { UserParams } from '../_models/userParams';
 import { of } from 'rxjs';
@@ -12,6 +12,7 @@ import { setPaginatedResponse, setPaginationHeaders } from './paginationHelper';
 @Injectable({
   providedIn: 'root'
 })
+
 export class MembersService {
   private http = inject(HttpClient);
   private accountService = inject(AccountService);

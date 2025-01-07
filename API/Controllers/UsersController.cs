@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API.Controllers;
 using API.DTOs;
 using API.Entities;
@@ -7,6 +8,7 @@ using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers;
 
@@ -18,7 +20,7 @@ public class UsersController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoServi
     public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
     {
         userParams.CurrentUsername = User.GetUserName();
-        var users = await unitOfWork.UserRepository.GetmembersAsync(userParams);
+        var users = await unitOfWork.UserRepository.GetMembersAsync(userParams);
         Response.AddPaginationHeader(users);
         return Ok(users);
     }
@@ -26,7 +28,10 @@ public class UsersController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoServi
     [HttpGet("{username}")]
     public async Task<ActionResult<MemberDto>> GetUser(string username)
     {
-        var user = await unitOfWork.UserRepository.GetMemberAsync(username);
+       var currentUsername = User.GetUserName();
+        var user = await unitOfWork.UserRepository.GetMemberAsync(username, 
+            isCurrentUser: currentUsername == username);
+
         if (user == null) return NotFound();
 
         return user;
@@ -93,7 +98,7 @@ public class UsersController(IUnitOfWork unitOfWork, IMapper mapper, IPhotoServi
         var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUserName());
         if (user == null) return BadRequest("User not found");
 
-        var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+        var photo = await unitOfWork.PhotoRepository.GetPhotoById(photoId);
         if (photo == null || photo.IsMain) return BadRequest("This photo cannot be deleted");
 
         if (photo.PublicId != null)
